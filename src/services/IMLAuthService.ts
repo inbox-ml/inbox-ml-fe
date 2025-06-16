@@ -1,13 +1,34 @@
-import {Auth} from "firebase/auth"
+import {type Auth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from "firebase/auth"
+import { FirebaseService } from "./FirebaseService"
+
+
+type SignUpWithPasswordProps = {
+    email: string;
+    password: string;
+}
 
  export class IMLAuthService {
 
     private _auth: Auth
 
-    constructor(){}
+    constructor(){
+        this._auth = FirebaseService.auth 
+    }
 
-    signInWithCredentials(){}
+    async signUpWithCredentials(props: SignUpWithPasswordProps){
+        const result = await createUserWithEmailAndPassword(this._auth, props.email, props.password)
+        console.log(result.user)
+    }
 
-    signInWithGoogle(){}
+    signInWithCredentials(){
+
+    }
+
+    async signInWithGoogle(){
+         const provider = new GoogleAuthProvider();
+         const {user} = await signInWithPopup(this._auth, provider);
+         //check if user exsist then return data other wise create basic record in firebase
+         console.log(user)
+    }
 
 }

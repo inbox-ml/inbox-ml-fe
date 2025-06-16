@@ -2,8 +2,15 @@ import { Button, Divider, Grid, TextField } from "@mui/material";
 import "./SignInPage.css"
 import IMLCard from "../../components/Card/IMLCard";
 import { Google } from "@mui/icons-material";
+import {IMLAuthService} from "../../services/IMLAuthService"
 
 export default function SingInPage(){
+
+    async function handleSignInWithGoogle(){
+        const auth = new IMLAuthService();
+        await auth.signInWithGoogle()
+    }
+
     return <Grid container height={1} alignItems="center" justifyContent="center">
         <Grid size={{xs: 12, xl: 6, lg: 6}}>
             <IMLCard sx={{p: 2}}>
@@ -19,7 +26,7 @@ export default function SingInPage(){
                     </Grid>
                     <Grid size={12} textAlign="right"><Divider /></Grid>
                      <Grid size={12} textAlign="center">
-                         <Button variant="text" sx={{color: "rgba(61, 89, 233, 0.6)"}}>
+                         <Button variant="text" sx={{color: "rgba(61, 89, 233, 0.6)"}} onClick={handleSignInWithGoogle}>
                             <span style={{display: "flex", alignItems: "center"}}>Sign In With Google</span>
                             <span style={{display: "flex", alignItems: "center"}}><Google /></span>
                          </Button>
