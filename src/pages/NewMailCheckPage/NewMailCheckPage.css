@@ -1,0 +1,23 @@
+.new-mail-check-page{
+
+    .new-mail-check-page-card{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+    }
+
+    .upload-image-card{
+        width: 100%;
+        height: 30vh;
+        cursor: pointer;
+    }
+    .response-card{
+        min-height: 30vh;
+        padding: 25px;
+        box-sizing: border-box;
+    }
+}
