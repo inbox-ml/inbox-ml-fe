@@ -1,7 +1,5 @@
-export const Route = createFileRoute({
-  component: RouteComponent,
-})
+import SignInPage from "../pages/SignInPage/SignInPage"
 
-function RouteComponent() {
-  return <div>Hello "/signIn"!</div>
-}
+export const Route = createFileRoute({
+  component: SignInPage,
+})
