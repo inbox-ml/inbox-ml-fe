@@ -24,11 +24,11 @@ type SignUpWithPasswordProps = {
 
     }
 
-    async signInWithGoogle(){
-         const provider = new GoogleAuthProvider();
-         const {user} = await signInWithPopup(this._auth, provider);
-         //check if user exsist then return data other wise create basic record in firebase
-         console.log(user)
+    async signInWithGoogle(): Promise<string> {
+        const provider = new GoogleAuthProvider();
+        const {user} = await signInWithPopup(this._auth, provider);
+        const token = await user.getIdToken()
+        return token
     }
 
 }

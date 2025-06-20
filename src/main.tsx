@@ -6,7 +6,7 @@ import {routeTree} from "./routeTree.gen"
 import { FirebaseService } from './services/FirebaseService'
 import { Provider } from 'react-redux'
 import config from "../public/firebase-config.json"
-import store from "./store"
+import {store} from "./store"
 
 const router = createRouter({routeTree})
 FirebaseService.init(config)

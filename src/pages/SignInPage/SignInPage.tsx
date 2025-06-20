@@ -3,15 +3,27 @@ import "./SignInPage.css"
 import IMLCard from "../../components/Card/IMLCard";
 import { Google } from "@mui/icons-material";
 import {IMLAuthService} from "../../services/IMLAuthService"
+import fetchUser from "../../api/user";
+import { setUser } from "../../redux/userSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "@tanstack/react-router";
 
 export default function SingInPage(){
 
+    const navigate = useNavigate()
+
+    const dispatch = useDispatch()
+
+
     async function handleSignInWithGoogle(){
         const auth = new IMLAuthService();
-        await auth.signInWithGoogle()
+        const token = await auth.signInWithGoogle()
+        const user = await fetchUser(token);
+        dispatch(setUser(user))
+        navigate({to: "/main/newMail"})
     }
 
-    return <Grid container height={1} alignItems="center" justifyContent="center">
+    return <Grid container height={1} alignItems="center" justifyContent="center" padding={2}>
         <Grid size={{xs: 12, xl: 6, lg: 6}}>
             <IMLCard sx={{p: 2}}>
                 <Grid container spacing={2}>

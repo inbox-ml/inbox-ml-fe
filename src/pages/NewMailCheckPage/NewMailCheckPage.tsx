@@ -4,6 +4,7 @@ import { Add, EmailOutlined } from "@mui/icons-material";
 import "./NewMailCheckPage.css"
 import { useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { useAppSelector } from "../../hooks/reduxHooks";
 
 type MainQueryProps = {
     fileBlob: string | ArrayBuffer | null
@@ -20,6 +21,10 @@ export default function NewMailCheckPage(){
     const isMobile = useIsMobile(768)
 
     const fileFieldRef = useRef<HTMLInputElement | null>(null)
+
+    const user = useAppSelector(state => state.user)
+
+    console.log({user})
 
     const {data, isPending, isSuccess, mutate, isError, reset} = useMutation({mutationFn: async (props: MainQueryProps): Promise<MainRespone> => {
         const res = await fetch(
