@@ -3,8 +3,8 @@ import "./SignInPage.css"
 import IMLCard from "../../components/Card/IMLCard";
 import { Google } from "@mui/icons-material";
 import {IMLAuthService} from "../../services/IMLAuthService"
-import fetchUser from "../../api/user";
-import { setUser } from "../../redux/userSlice";
+import {fetchUser} from "../../api/user";
+import { setUser, type UserProps } from "../../redux/userSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "@tanstack/react-router";
 
@@ -19,7 +19,7 @@ export default function SingInPage(){
         const auth = new IMLAuthService();
         const token = await auth.signInWithGoogle()
         const user = await fetchUser(token);
-        dispatch(setUser(user))
+        dispatch(setUser(user as UserProps))
         navigate({to: "/main/newMail"})
     }
 

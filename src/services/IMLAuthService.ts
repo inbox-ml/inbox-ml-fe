@@ -17,7 +17,7 @@ type SignUpWithPasswordProps = {
 
     async signUpWithCredentials(props: SignUpWithPasswordProps){
         const result = await createUserWithEmailAndPassword(this._auth, props.email, props.password)
-        console.log(result.user)
+        return result
     }
 
     signInWithCredentials(){

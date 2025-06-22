@@ -4,8 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { onAuthStateChanged } from 'firebase/auth'
 import { FirebaseService } from '../services/FirebaseService'
 import { useAppDispatch } from '../hooks/reduxHooks'
-import fetchUser from '../api/user'
-import { setUser } from '../redux/userSlice'
+import {fetchUser} from '../api/user'
+import { setUser, type UserProps } from '../redux/userSlice'
 
 const queryClient = new QueryClient()
 
@@ -23,8 +23,8 @@ function RootComponent() {
     const token = await user?.getIdToken();
     if(token){
       const user = await fetchUser(token);
-      dispatch(setUser(user))
-      navigate({to: "/main/newMail"})
+      dispatch(setUser(user as UserProps))
+      //navigate({to: "/main/newMail"})
     }
     else{
       navigate({to: "signIn"})

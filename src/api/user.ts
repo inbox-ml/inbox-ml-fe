@@ -1,4 +1,6 @@
-export default async function fetchUser(token: string){
+import * as changeCase from "change-case/keys"
+
+export async function fetchUser(token: string){
     const res = await fetch("http://127.0.0.1:8000/user", {
         method: "GET",
         headers: {
@@ -6,5 +8,18 @@ export default async function fetchUser(token: string){
         }
     })
     if(!res.ok){throw new Error("Failed to fetch user data")}
-    return res.json()
+    const response = await res.json()
+    return changeCase.camelCase(response)
+}
+
+export async function createUser(token: string){
+    const res = await fetch("http://127.0.0.1:8000/user", {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    if(!res.ok){throw new Error("Failed to create user record")}
+    const response = await res.json()
+    return changeCase.camelCase(response)
 }

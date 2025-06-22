@@ -1,7 +1,9 @@
-export const Route = createFileRoute({
-  component: RouteComponent,
-})
+import { redirect } from '@tanstack/react-router'
 
-function RouteComponent() {
-  return <div>Hello "/main/"!</div>
+function redirectDoDefaultChild(){
+  throw redirect({to: "/main/newMail"})
 }
+
+export const Route = createFileRoute({
+  loader: redirectDoDefaultChild
+})
