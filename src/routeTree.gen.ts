@@ -13,6 +13,7 @@ import type { CreateFileRoute, FileRoutesByPath } from '@tanstack/react-router'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignUpRouteImport } from './routes/signUp'
 import { Route as SignInRouteImport } from './routes/signIn'
+import { Route as MainRouteImport } from './routes/main'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MainIndexRouteImport } from './routes/main/index'
 import { Route as MainNewMailRouteImport } from './routes/main/newMail'
@@ -27,28 +28,34 @@ const SignInRoute = SignInRouteImport.update({
   path: '/signIn',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MainRoute = MainRouteImport.update({
+  id: '/main',
+  path: '/main',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MainIndexRoute = MainIndexRouteImport.update({
-  id: '/main/',
-  path: '/main/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => MainRoute,
 } as any)
 const MainNewMailRoute = MainNewMailRouteImport.update({
-  id: '/main/newMail',
-  path: '/main/newMail',
-  getParentRoute: () => rootRouteImport,
+  id: '/newMail',
+  path: '/newMail',
+  getParentRoute: () => MainRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/main': typeof MainRouteWithChildren
   '/signIn': typeof SignInRoute
   '/signUp': typeof SignUpRoute
   '/main/newMail': typeof MainNewMailRoute
-  '/main': typeof MainIndexRoute
+  '/main/': typeof MainIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/main': typeof MainRouteWithChildren
   '/signIn': typeof SignInRoute
   '/signUp': typeof SignUpRoute
   '/main/newMail': typeof MainNewMailRoute
@@ -67,18 +75,24 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/signIn' | '/signUp' | '/main/newMail' | '/main'
+  fullPaths: '/' | '/main' | '/signIn' | '/signUp' | '/main/newMail' | '/main/'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/signIn' | '/signUp' | '/main/newMail' | '/main'
-  id: '__root__' | '/' | '/signIn' | '/signUp' | '/main/newMail' | '/main/'
+  id:
+    | '__root__'
+    | '/'
+    | '/main'
+    | '/signIn'
+    | '/signUp'
+    | '/main/newMail'
+    | '/main/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MainRoute: typeof MainRouteWithChildren
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
-  MainNewMailRoute: typeof MainNewMailRoute
-  MainIndexRoute: typeof MainIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -88,6 +102,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/main': {
+      id: '/main'
+      path: '/main'
+      fullPath: '/main'
+      preLoaderRoute: typeof MainRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signIn': {
@@ -106,17 +127,17 @@ declare module '@tanstack/react-router' {
     }
     '/main/newMail': {
       id: '/main/newMail'
-      path: '/main/newMail'
+      path: '/newMail'
       fullPath: '/main/newMail'
       preLoaderRoute: typeof MainNewMailRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MainRoute
     }
     '/main/': {
       id: '/main/'
-      path: '/main'
-      fullPath: '/main'
+      path: '/'
+      fullPath: '/main/'
       preLoaderRoute: typeof MainIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MainRoute
     }
   }
 }
@@ -128,6 +149,15 @@ declare module './routes/index' {
     FileRoutesByPath['/']['id'],
     FileRoutesByPath['/']['path'],
     FileRoutesByPath['/']['fullPath']
+  >
+}
+declare module './routes/main' {
+  const createFileRoute: CreateFileRoute<
+    '/main',
+    FileRoutesByPath['/main']['parentRoute'],
+    FileRoutesByPath['/main']['id'],
+    FileRoutesByPath['/main']['path'],
+    FileRoutesByPath['/main']['fullPath']
   >
 }
 declare module './routes/signIn' {
@@ -167,12 +197,23 @@ declare module './routes/main/index' {
   >
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  SignInRoute: SignInRoute,
-  SignUpRoute: SignUpRoute,
+interface MainRouteChildren {
+  MainNewMailRoute: typeof MainNewMailRoute
+  MainIndexRoute: typeof MainIndexRoute
+}
+
+const MainRouteChildren: MainRouteChildren = {
   MainNewMailRoute: MainNewMailRoute,
   MainIndexRoute: MainIndexRoute,
+}
+
+const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  MainRoute: MainRouteWithChildren,
+  SignInRoute: SignInRoute,
+  SignUpRoute: SignUpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
