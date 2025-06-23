@@ -1,4 +1,4 @@
-import {type Auth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from "firebase/auth"
+import {type Auth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut} from "firebase/auth"
 import { FirebaseService } from "./FirebaseService"
 
 
@@ -23,6 +23,8 @@ type SignUpWithPasswordProps = {
     signInWithCredentials(){
 
     }
+
+    async signOut(){ await signOut(this._auth)}
 
     async signInWithGoogle(): Promise<string> {
         const provider = new GoogleAuthProvider();

@@ -1,5 +1,5 @@
 
-import { Button, Divider, Grid, TextField } from "@mui/material";
+import { Button, Divider, Grid, TextField, Typography } from "@mui/material";
 import IMLCard from "../../components/Card/IMLCard";
 import {useForm} from "react-hook-form"
 import { Google } from "@mui/icons-material";
@@ -72,6 +72,15 @@ export default function SignUpPage(){
        }
     }
 
+    function renderSingIn(){
+        return  <Grid size={12}>
+                    <Typography variant="subtitle2" color="textSecondary" textAlign="center">
+                        <span style={{marginRight: "5px"}}>Already have account?</span>
+                        <span style={{color: "rgba(61, 89, 233, 0.6)", cursor: "pointer"}} onClick={() => {navigate({to: "/signIn"})}}>Sign In</span>
+                    </Typography>
+                </Grid>
+    }
+
 
     return <Grid container height={1} alignItems="center" justifyContent="center" padding={2}>
         <Grid size={{xs: 12, xl: 6, lg: 6, md: 6}}>
@@ -90,6 +99,7 @@ export default function SignUpPage(){
                             <span style={{display: "flex", alignItems: "center"}}><Google /></span>
                          </Button>
                      </Grid>
+                    {renderSingIn()} 
                 </Grid>
             </IMLCard>
         </Grid>
