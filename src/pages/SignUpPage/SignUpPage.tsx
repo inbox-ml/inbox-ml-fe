@@ -25,13 +25,15 @@ type FieldProps = {
 
 export default function SignUpPage(){
 
-    const{register, handleSubmit, getValues} = useForm<SingUpForm>({defaultValues: {
+    const DEFAULT_VALUES = {
         firstName: "",
         lastName: "",
         email: "",
         password: "",
         repeatedPassword: "",
-    }})
+    }
+
+    const{register, handleSubmit} = useForm<SingUpForm>({defaultValues: DEFAULT_VALUES})
 
      const navigate = useNavigate()
 
@@ -45,10 +47,24 @@ export default function SignUpPage(){
         {id: "repeatedPassword", label: "Repeat Password"}
     ]
 
+    async function handleUserCreation(token: string){
+        const user = await createUser(token);
+        dispatch(setUser(user as UserProps));
+    }
 
-    function handleGoogleSignUp(){
-        const values = getValues();
 
+    async function handleGoogleSignUp(){
+       try {
+            const auth = new IMLAuthService();
+            const token = await auth.signInWithGoogle() 
+            if(!token){ throw new Error("Failed to get token")};
+            await handleUserCreation(token)
+       }
+       catch(err){
+        if(err instanceof Error){
+            enqueueSnackbar(err.message, {variant: "error", anchorOrigin: {horizontal: "center", vertical: "top"}})
+        }
+       }
     }
 
     async function handleEmailPasswordSignUp(values: SingUpForm){
@@ -61,13 +77,12 @@ export default function SignUpPage(){
        const res = await auth.signUpWithCredentials({email: userInfo.email, password})
        const token = await res.user.getIdToken()
        if(!token){ throw new Error("Failed to get token")}
-       const user = await createUser(token)
-       dispatch(setUser(user as UserProps))
+       await handleUserCreation(token)
        navigate({to: "/main/newMail"})
        }
        catch(e){
         if(e instanceof Error){
-            enqueueSnackbar(e.message, {variant: "error"})
+            enqueueSnackbar(e.message, {variant: "error", anchorOrigin: {horizontal: "center", vertical: "top"}})
         }
        }
     }

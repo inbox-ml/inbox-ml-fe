@@ -5,6 +5,7 @@ import "./NewMailCheckPage.css"
 import { useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useAppSelector } from "../../hooks/reduxHooks";
+import MobileHistoryDrawer from "./components/MobileHistoryList/MobileHistoryDrawer";
 
 type MainQueryProps = {
     fileBlob: string | ArrayBuffer | null
@@ -65,6 +66,7 @@ export default function NewMailCheckPage(){
                     <Grid size={12}>
                         {!isMobile && <Button fullWidth variant="contained" sx={{background: "rgba(61, 89, 233, 0.6)"}} onClick={reset}>New Check</Button>}
                         {isMobile && <Fab size="small" sx={{background: "rgba(61, 89, 233, 0.6)", color: "white"}}><Add /></Fab>}
+                        {isMobile && <MobileHistoryDrawer />}
                     </Grid>
                 </Grid>
             </Card>

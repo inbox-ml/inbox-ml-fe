@@ -39,7 +39,7 @@ function MainHeader(){
 
     return <IMLCard sx={{height: "60px", m: 2, mb:1, mt:1, borderRadius: "4px!important"}}>
         <Grid container justifyContent="flex-end" width={1} p={1}>
-            <Grid size={{xs: 4, xl: 2}} display="flex" alignItems="center" justifyContent="flex-end" textAlign="end">
+            <Grid size={{xs: 5, xl: 2}} display="flex" alignItems="center" justifyContent="flex-end" textAlign="end">
                <Button sx={{background: "rgba(61, 89, 233, 0.6)!important"}} size="large" onClick={(el) => {setAnchorEl(el.currentTarget)}}>
                  <Typography color="white" width="100%" mr={1}>{user.firstName} {user.lastName}</Typography>
                 <AccountCircle sx={{color: "white"}} />
