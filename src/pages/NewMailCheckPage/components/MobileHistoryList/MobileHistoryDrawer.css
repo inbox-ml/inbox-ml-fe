@@ -1,5 +1,18 @@
 .history-list-fab-btn {
-    margin-top: 15px;
-    background: rgba(61, 89, 233, 0.6);
-    color: white
+    margin-top: 15px!important;
+    background: rgba(61, 89, 233, 0.6)!important;
+    color: white!important
+}
+
+.history-item-button{
+
+    .MuiListItemIcon-root{
+        min-width: 30px;
+    }
+
+    .history-item-button-text{
+        & > span {
+            font-size: .8rem;
+        }
+    }
 }

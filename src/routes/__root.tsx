@@ -5,7 +5,9 @@ import { onAuthStateChanged } from 'firebase/auth'
 import { FirebaseService } from '../services/FirebaseService'
 import { useAppDispatch } from '../hooks/reduxHooks'
 import {fetchUser} from '../api/user'
-import { setUser, type UserProps } from '../redux/userSlice'
+import { setToken, setUser, type UserProps } from '../redux/userSlice'
+import { getHistoryList } from '../api/history'
+import { setHistoryList, type HistoryItemProps } from '../redux/historySlice'
 
 const queryClient = new QueryClient()
 
@@ -23,7 +25,11 @@ function RootComponent() {
     const token = await user?.getIdToken();
     if(token){
       const user = await fetchUser(token);
+      const history = await getHistoryList(token)
+    
+      dispatch(setHistoryList((history ?? []) as HistoryItemProps[]))
       dispatch(setUser(user as UserProps))
+      dispatch(setToken({token}))
       //navigate({to: "/main/newMail"})
     }
     else{

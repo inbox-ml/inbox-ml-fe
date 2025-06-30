@@ -1,6 +1,7 @@
 import * as changeCase from "change-case/keys"
 
 export async function fetchUser(token: string){
+    console.log({token})
     const res = await fetch("http://127.0.0.1:8000/user", {
         method: "GET",
         headers: {

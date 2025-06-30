@@ -33,7 +33,10 @@ export default function NewMailCheckPage(){
                 {
                     method: "POST", 
                     body: JSON.stringify({fileBlob: props.fileBlob}),
-                    headers: {"Content-Type": "application/json"}
+                    headers: {
+                        "Content-Type": "application/json",
+                         Authorization: `Bearer ${user.token}`
+                    }
                 })
         return res.json()        
     }

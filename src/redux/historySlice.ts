@@ -2,7 +2,9 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 type HistoryItemProps = {
    id: string;
-   isSpam: boolean;
+   summaryTitle: string;
+   isScam: boolean;
+   category: string;
    summary: string;
 }
 
@@ -13,7 +15,8 @@ const historySlice = createSlice({
     initialState,
     reducers: {
         setHistoryList: (state, action: PayloadAction<HistoryItemProps[]>) => {
-            return {...state, ...(action.payload)}
+            const exsistingIds = state.map(item => item.id)
+            return [...state, ...(action.payload.filter(item => !exsistingIds.includes(item.id)))]
         },
         resetHistoryList: () => {
            return initialState
