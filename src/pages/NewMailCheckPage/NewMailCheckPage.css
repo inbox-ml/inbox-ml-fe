@@ -1,5 +1,6 @@
 .new-mail-check-page{
-
+    position: relative;
+    height: calc(100% - 76px);
     .new-mail-check-page-card{
         display: flex;
         align-items: center;

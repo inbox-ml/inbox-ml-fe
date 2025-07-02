@@ -1,0 +1,12 @@
+.history-item-button{
+
+    .MuiListItemIcon-root{
+        min-width: 30px;
+    }
+
+    .history-item-button-text{
+        & > span {
+            font-size: .8rem;
+        }
+    }
+}

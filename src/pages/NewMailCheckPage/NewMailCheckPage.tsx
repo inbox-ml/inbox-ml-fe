@@ -5,7 +5,8 @@ import "./NewMailCheckPage.css"
 import { useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useAppSelector } from "../../hooks/reduxHooks";
-import MobileHistoryDrawer from "./components/MobileHistoryList/MobileHistoryDrawer";
+import MobileHistoryDrawer from "./components/MobileHistoryDrawer/MobileHistoryDrawer";
+import HistoryList from "./components/HistoryList/HistoryList";
 
 type MainQueryProps = {
     fileBlob: string | ArrayBuffer | null
@@ -68,13 +69,14 @@ export default function NewMailCheckPage(){
 
 
     function renderSideMenu(){
-        return  <Grid size={{xl: 3, xs: 2}} height={1}>
+        return  <Grid size={{xl: 3, lg: 3, md: 3, xs: 2}} height={1}>
             <Card elevation={0} sx={{width: 1, height: 1, background: "rgba(255, 255, 255, 0.2)", backdropFilter: "blur(10px)", border: "1px solid rgba(255, 255, 255, 0.3)" }}>
                 <Grid container height={1} p={2}>
                     <Grid size={12}>
                         {!isMobile && <Button fullWidth variant="contained" sx={{background: "rgba(61, 89, 233, 0.6)"}} onClick={() => {setResponse(null)}}>New Check</Button>}
                         {isMobile && <Fab size="small" sx={{background: "rgba(61, 89, 233, 0.6)", color: "white"}} onClick={() => {setResponse(null)}}><Add /></Fab>}
                         {isMobile && <MobileHistoryDrawer onSelect={(val) => setResponse(val)}  />}
+                        {!isMobile && <HistoryList onSelect={(val) => setResponse(val)}  />}
                     </Grid>
                 </Grid>
             </Card>
@@ -113,7 +115,7 @@ export default function NewMailCheckPage(){
 
         const classes = ["upload-image-card", "new-mail-check-page-card"]
 
-        return <Grid size={{xl: 9, xs: 10}}>
+        return <Grid size={{xl: 9, lg: 9, md: 9, xs: 10}}>
             <Grid container height={1} alignItems="center" justifyContent="center">
                 <Grid size={isMobile ? 9 : 4}>
                     <Card className={classes.join(" ")} elevation={0} onClick={() => {fileFieldRef.current?.click()}}>
@@ -130,7 +132,7 @@ export default function NewMailCheckPage(){
         </Grid>
     }
 
-    return <Grid container height={1} p={2} className="new-mail-check-page">
+    return <Grid container p={2} className="new-mail-check-page">
        {renderSideMenu()}
        {isPending && renderPendingState()}
        {!response && renderLoadImageSection()}
