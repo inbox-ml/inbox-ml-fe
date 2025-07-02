@@ -2,7 +2,7 @@ import { Button, Card, Fab, Grid, Skeleton, Typography } from "@mui/material";
 import useIsMobile from "../../hooks/useIsMobile";
 import { Add, EmailOutlined } from "@mui/icons-material";
 import "./NewMailCheckPage.css"
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import MobileHistoryDrawer from "./components/MobileHistoryList/MobileHistoryDrawer";
@@ -11,23 +11,21 @@ type MainQueryProps = {
     fileBlob: string | ArrayBuffer | null
 }
 
-type MainRespone = {
+export type MainRespone = {
     summary: string;
-    is_scam: boolean
+    isScam: boolean;
 }
 
 export default function NewMailCheckPage(){
 
 
     const isMobile = useIsMobile(768)
-
     const fileFieldRef = useRef<HTMLInputElement | null>(null)
-
     const user = useAppSelector(state => state.user)
 
-    console.log({user})
+    const [response, setResponse] = useState<MainRespone | null>(null)
 
-    const {data, isPending, isSuccess, mutate, isError, reset} = useMutation({mutationFn: async (props: MainQueryProps): Promise<MainRespone> => {
+    const {data, isPending, isSuccess, mutate, isError} = useMutation({mutationFn: async (props: MainQueryProps): Promise<MainRespone> => {
         const res = await fetch(
                 "http://127.0.0.1:8000/agent/summurize", 
                 {
@@ -41,6 +39,13 @@ export default function NewMailCheckPage(){
         return res.json()        
     }
 })
+
+
+    useEffect(() => {
+        if(isSuccess && data){
+            setResponse(data)
+        }
+    }, [data, isSuccess])
 
     function handleFileUpload(file?: File){
         if(!file){
@@ -59,7 +64,7 @@ export default function NewMailCheckPage(){
          
     }
 
-    console.log({data, isPending, isSuccess, isError})
+    console.log({response, isPending, isSuccess, isError})
 
 
     function renderSideMenu(){
@@ -67,9 +72,9 @@ export default function NewMailCheckPage(){
             <Card elevation={0} sx={{width: 1, height: 1, background: "rgba(255, 255, 255, 0.2)", backdropFilter: "blur(10px)", border: "1px solid rgba(255, 255, 255, 0.3)" }}>
                 <Grid container height={1} p={2}>
                     <Grid size={12}>
-                        {!isMobile && <Button fullWidth variant="contained" sx={{background: "rgba(61, 89, 233, 0.6)"}} onClick={reset}>New Check</Button>}
-                        {isMobile && <Fab size="small" sx={{background: "rgba(61, 89, 233, 0.6)", color: "white"}}><Add /></Fab>}
-                        {isMobile && <MobileHistoryDrawer />}
+                        {!isMobile && <Button fullWidth variant="contained" sx={{background: "rgba(61, 89, 233, 0.6)"}} onClick={() => {setResponse(null)}}>New Check</Button>}
+                        {isMobile && <Fab size="small" sx={{background: "rgba(61, 89, 233, 0.6)", color: "white"}} onClick={() => {setResponse(null)}}><Add /></Fab>}
+                        {isMobile && <MobileHistoryDrawer onSelect={(val) => setResponse(val)}  />}
                     </Grid>
                 </Grid>
             </Card>
@@ -97,7 +102,7 @@ export default function NewMailCheckPage(){
             <Grid container alignItems="center" justifyContent="center" width={1} spacing={2}>
                 <Grid size={10}>
                     <Card elevation={0} className="new-mail-check-page-card response-card">
-                        <Typography variant="body1" textAlign="justify">{data?.summary}</Typography>
+                        <Typography variant="body1" textAlign="justify">{response?.summary}</Typography>
                 </Card>
                 </Grid>
             </Grid>
@@ -128,7 +133,7 @@ export default function NewMailCheckPage(){
     return <Grid container height={1} p={2} className="new-mail-check-page">
        {renderSideMenu()}
        {isPending && renderPendingState()}
-       {!isPending && !data && renderLoadImageSection()}
-       {isSuccess && data && renderResponseState()}
+       {!response && renderLoadImageSection()}
+       {response && renderResponseState()}
     </Grid>
 }

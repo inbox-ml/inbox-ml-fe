@@ -1,24 +1,29 @@
 import { Circle, History } from "@mui/icons-material"
 import { Drawer, Fab, Grid, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material"
 import "./MobileHistoryDrawer.css"
-import {useEffect, useState } from "react"
+import {useState} from "react"
 import { useAppSelector } from "../../../../hooks/reduxHooks"
+import type { MainRespone } from "../../NewMailCheckPage"
+import type { HistoryItemProps } from "../../../../redux/historySlice"
 
-export default function MobileHistoryDrawer(){
+type MobileHistoryDrawerProps = {
+    onSelect: (val: MainRespone) => void
+}
+
+export default function MobileHistoryDrawer(props: MobileHistoryDrawerProps){
 
     const historyList = useAppSelector((state) => state.history)
 
-    console.log(historyList)
-
     const [open, setOpen] = useState<boolean>(false)
-
-
-    useEffect(() => {
-
-    }, [])
 
     function toggleDrawer(){
         setOpen(prev => !prev)
+    }
+
+    function selectItem(item: HistoryItemProps){
+        const {summary, isScam} = item
+        props.onSelect({summary, isScam})
+        toggleDrawer()
     }
 
     function renderHistoryMenuAction(){
@@ -28,7 +33,7 @@ export default function MobileHistoryDrawer(){
     function renderList(){
         return <Grid size={12}>
              <List>
-            {historyList.map(item => <ListItemButton className="history-item-button" key={item.id}>
+            {historyList.map(item => <ListItemButton className="history-item-button" key={item.id} onClick={() => {selectItem(item)}}>
                 <ListItemIcon><Circle fontSize="small" /></ListItemIcon>
                 <ListItemText className="history-item-button-text" secondary={"Here will be date"}>{item.summaryTitle}</ListItemText>
             </ListItemButton>)}
