@@ -5,6 +5,7 @@ import { useAppSelector } from "../hooks/reduxHooks"
 import { AccountCircle, Logout } from "@mui/icons-material"
 import { useState } from "react"
 import { IMLAuthService } from "../services/IMLAuthService"
+import IMLPage from "../components/IMLPage/IMLPage"
 
 export const Route = createFileRoute({
   component: RouteComponent,
@@ -37,6 +38,8 @@ function MainHeader(){
         </Menu>
      }
 
+     if(!user.token){ return}
+
     return <IMLCard sx={{height: "60px", m: 2, mb:1, mt:1, borderRadius: "4px!important"}}>
         <Grid container justifyContent="flex-end" width={1} p={1}>
             <Grid size={{xs: 5, xl: 2}} display="flex" alignItems="center" justifyContent="flex-end" textAlign="end">
@@ -51,8 +54,8 @@ function MainHeader(){
 }
 
 function RouteComponent() {
-  return <>
-    <MainHeader />
+  return <IMLPage height={1} width={1} position="relative">
+    {<MainHeader />}
     <Outlet />
-  </>
+  </IMLPage>
 }

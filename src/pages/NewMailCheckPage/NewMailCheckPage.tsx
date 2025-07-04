@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import MobileHistoryDrawer from "./components/MobileHistoryDrawer/MobileHistoryDrawer";
 import HistoryList from "./components/HistoryList/HistoryList";
+import IMLPage from "../../components/IMLPage/IMLPage";
 
 type MainQueryProps = {
     fileBlob: string | ArrayBuffer | null
@@ -40,6 +41,8 @@ export default function NewMailCheckPage(){
         return res.json()        
     }
 })
+
+console.log(user)
 
 
     useEffect(() => {
@@ -100,7 +103,7 @@ export default function NewMailCheckPage(){
     }
 
     function renderResponseState(){
-        return <Grid size={10} display="flex" height={1} alignItems="center" justifyContent="center">
+        return <Grid size={{xl: 9, lg: 9, md: 9, xs: 10}} display="flex" height={1} alignItems="center" justifyContent="center">
             <Grid container alignItems="center" justifyContent="center" width={1} spacing={2}>
                 <Grid size={10}>
                     <Card elevation={0} className="new-mail-check-page-card response-card">
@@ -132,10 +135,12 @@ export default function NewMailCheckPage(){
         </Grid>
     }
 
-    return <Grid container p={2} className="new-mail-check-page">
+    return <IMLPage height={1} width={1} position="relative" isLoading={isPending}>
+        <Grid container p={2} className="new-mail-check-page">
        {renderSideMenu()}
        {isPending && renderPendingState()}
        {!response && renderLoadImageSection()}
        {response && renderResponseState()}
     </Grid>
+    </IMLPage>
 }
