@@ -5,10 +5,10 @@ import {useForm} from "react-hook-form"
 import { Google } from "@mui/icons-material";
 import { enqueueSnackbar } from "notistack";
 import { IMLAuthService } from "../../services/IMLAuthService";
-import { createUser } from "../../api/user";
 import { useAppDispatch } from "../../hooks/reduxHooks";
 import { useNavigate } from "@tanstack/react-router";
 import { setUser, type UserProps } from "../../redux/userSlice";
+import UserService from "../../services/UserServie";
 
 type SingUpForm = {
     firstName: string;
@@ -48,7 +48,7 @@ export default function SignUpPage(){
     ]
 
     async function handleUserCreation(token: string){
-        const user = await createUser(token);
+        const user = await UserService.create(token);
         dispatch(setUser(user as UserProps));
     }
 

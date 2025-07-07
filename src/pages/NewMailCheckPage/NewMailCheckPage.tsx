@@ -42,8 +42,6 @@ export default function NewMailCheckPage(){
     }
 })
 
-console.log(user)
-
 
     useEffect(() => {
         if(isSuccess && data){
