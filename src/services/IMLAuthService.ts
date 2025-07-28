@@ -1,4 +1,4 @@
-import {type Auth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut} from "firebase/auth"
+import {type Auth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, signInWithEmailAndPassword} from "firebase/auth"
 import { FirebaseService } from "./FirebaseService"
 
 
@@ -16,12 +16,13 @@ type SignUpWithPasswordProps = {
     }
 
     async signUpWithCredentials(props: SignUpWithPasswordProps){
-        const result = await createUserWithEmailAndPassword(this._auth, props.email, props.password)
-        return result
+        return await createUserWithEmailAndPassword(this._auth, props.email, props.password)
     }
 
-    signInWithCredentials(){
-
+    async signInWithCredentials(props: SignUpWithPasswordProps){
+        const {user} = await signInWithEmailAndPassword(this._auth, props.email, props.password)
+        const token = await user.getIdToken()
+        return token
     }
 
     async signOut(){ await signOut(this._auth)}

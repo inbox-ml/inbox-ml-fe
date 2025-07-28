@@ -7,12 +7,39 @@ import { setUser, type UserProps } from "../../redux/userSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "@tanstack/react-router";
 import UserService from "../../services/UserServie";
+import { useForm } from "react-hook-form";
+import { enqueueSnackbar } from "notistack";
+
+type SignInWithCredentialsProps = {
+    email: string;
+    password: string;
+}
 
 export default function SingInPage(){
+
+    const {register, handleSubmit} = useForm<SignInWithCredentialsProps>({defaultValues: {
+        email: "",
+        password: ""
+    }})
 
     const navigate = useNavigate()
 
     const dispatch = useDispatch()
+
+    async function handleSignIn(vals: SignInWithCredentialsProps){
+       try{
+         const auth = new IMLAuthService();
+        const token  = await auth.signInWithCredentials(vals)
+        const user = await UserService.get(token);
+        dispatch(setUser(user as UserProps))
+        navigate({to: "/main/newMail"})
+       }
+       catch(e){
+         if(e instanceof Error){
+            enqueueSnackbar(e.message, {variant: "error", anchorOrigin: {horizontal: "center", vertical: "top"}})
+        }
+       }
+    }
 
 
     async function handleSignInWithGoogle(){
@@ -28,13 +55,16 @@ export default function SingInPage(){
             <IMLCard sx={{p: 2}}>
                 <Grid container spacing={2}>
                     <Grid size={12}>
-                        <TextField label="Email" variant="outlined" fullWidth />
+                        <TextField {...register("email")} label="Email" variant="outlined" fullWidth />
                     </Grid>
                      <Grid size={12}>
-                        <TextField label="Password" variant="outlined" type="password" fullWidth />
+                        <TextField {...register("password")} label="Password" variant="outlined" type="password" fullWidth />
                     </Grid>
                     <Grid size={12} textAlign="right">
-                        <Button variant="contained" sx={{background: "rgba(61, 89, 233, 0.6)"}}>Sign In</Button>
+                        <Button variant="contained" sx={{background: "rgba(61, 89, 233, 0.6)"}} onClick={() => {
+                            console.log("ok")
+                            handleSubmit(handleSignIn)()
+                         }}>Sign In</Button>
                     </Grid>
                     <Grid size={12} textAlign="right"><Divider /></Grid>
                      <Grid size={12} textAlign="center">
