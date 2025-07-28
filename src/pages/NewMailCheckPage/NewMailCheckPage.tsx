@@ -1,4 +1,4 @@
-import { Button, Card, Fab, Grid, Skeleton, Typography } from "@mui/material";
+import { Button, Card, Fab, Grid, Skeleton, Tab, Tabs, Typography } from "@mui/material";
 import useIsMobile from "../../hooks/useIsMobile";
 import { Add, EmailOutlined } from "@mui/icons-material";
 import "./NewMailCheckPage.css"
@@ -26,6 +26,7 @@ export default function NewMailCheckPage(){
     const user = useAppSelector(state => state.user)
 
     const [response, setResponse] = useState<MainRespone | null>(null)
+    const [selectedTab, setSelectedTab] = useState<"email" | "mail">("mail")
 
     const {data, isPending, isSuccess, mutate, isError} = useMutation({mutationFn: async (props: MainQueryProps): Promise<MainRespone> => {
         const res = await fetch(
@@ -66,19 +67,36 @@ export default function NewMailCheckPage(){
          
     }
 
-    console.log({response, isPending, isSuccess, isError})
+    function renderTabs(){
+        return <Tabs variant="fullWidth" value={selectedTab} onChange={(_, val) => {setSelectedTab(val)}}>
+            <Tab label="Mail" value="mail" />
+            <Tab label="Email" value="email" />
+        </Tabs>
+    }
+
+    function renderEmailTab(){
+        return <Grid size={12}>
+            Test
+        </Grid>
+    }
+
+    function renderMailTab(){
+        return <Grid size={12}>
+                {!isMobile && <Button fullWidth variant="contained" sx={{background: "rgba(61, 89, 233, 0.6)"}} onClick={() => {setResponse(null)}}>New Check</Button>}
+                {isMobile && <Fab size="small" sx={{background: "rgba(61, 89, 233, 0.6)", color: "white"}} onClick={() => {setResponse(null)}}><Add /></Fab>}
+                {isMobile && <MobileHistoryDrawer onSelect={(val) => setResponse(val)}  />}
+                {!isMobile && <HistoryList onSelect={(val) => setResponse(val)}  />}
+            </Grid>
+    }
 
 
     function renderSideMenu(){
         return  <Grid size={{xl: 3, lg: 3, md: 3, xs: 2}} height={1}>
             <Card elevation={0} sx={{width: 1, height: 1, background: "rgba(255, 255, 255, 0.2)", backdropFilter: "blur(10px)", border: "1px solid rgba(255, 255, 255, 0.3)" }}>
+                 {renderTabs()}
                 <Grid container height={1} p={2}>
-                    <Grid size={12}>
-                        {!isMobile && <Button fullWidth variant="contained" sx={{background: "rgba(61, 89, 233, 0.6)"}} onClick={() => {setResponse(null)}}>New Check</Button>}
-                        {isMobile && <Fab size="small" sx={{background: "rgba(61, 89, 233, 0.6)", color: "white"}} onClick={() => {setResponse(null)}}><Add /></Fab>}
-                        {isMobile && <MobileHistoryDrawer onSelect={(val) => setResponse(val)}  />}
-                        {!isMobile && <HistoryList onSelect={(val) => setResponse(val)}  />}
-                    </Grid>
+                    {selectedTab === "mail" && renderMailTab()}
+                    {selectedTab === "email" && renderEmailTab()}
                 </Grid>
             </Card>
         </Grid>
