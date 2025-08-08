@@ -1,8 +1,9 @@
 {
-  "apiKey": "AIzaSyAQpXGJ_NynE8ot1irEpVlz03WlhuGEqZ4",
-  "authDomain": "oh-snap-bcacf.firebaseapp.com",
-  "projectId": "oh-snap-bcacf",
-  "storageBucket": "oh-snap-bcacf.firebasestorage.app",
-  "messagingSenderId": "410440942344",
-  "appId": "1:410440942344:web:2c8fea465341ab37c722bd"
+  "apiKey": "AIzaSyCMfC5AQg-Pt2vJSAyb_aTFK0JbhZ2UsF4",
+  "authDomain": "inbox-mind.firebaseapp.com",
+  "projectId": "inbox-mind",
+  "storageBucket": "inbox-mind.firebasestorage.app",
+  "messagingSenderId": "349352373808",
+  "appId": "1:349352373808:web:6ea6680eb8d57547ab87f5",
+  "measurementId": "G-86EJWKZB4J"
 }
