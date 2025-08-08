@@ -5,7 +5,7 @@ import { createRouter, RouterProvider } from '@tanstack/react-router'
 import {routeTree} from "./routeTree.gen"
 import { FirebaseService } from './services/FirebaseService'
 import { Provider } from 'react-redux'
-import config from "../public/firebase-config.json"
+import config from "../config/firebase-config.json"
 import {SnackbarProvider} from "notistack"
 import {store} from "./store"
 
